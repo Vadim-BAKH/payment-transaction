@@ -21,3 +21,14 @@ class PasswordsDoNotMatch(HTTPException):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Passwords do not match",
         )
+
+
+class BadAccountNumber(HTTPException):
+    """Исключение при невалидном счёте."""
+
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Account has 20 numbers and "
+            "first number must be more then 0.",
+        )

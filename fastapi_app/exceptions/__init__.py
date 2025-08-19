@@ -13,9 +13,11 @@ __all__ = [
     "UserNotFound",
     "NotRightEnough",
     "ResourceNotFound",
+    "BadAccountNumber",
 ]
 
 from fastapi_app.exceptions.detail_exc.bad_request import (
+    BadAccountNumber,
     EmailExists,
     PasswordsDoNotMatch,
 )

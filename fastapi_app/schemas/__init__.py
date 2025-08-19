@@ -15,13 +15,25 @@ __all__ = [
     "RoleOut",
     "ResourceOut",
     "ResourceCreate",
+    "AccountCreate",
+    "AccountOut",
+    "CreatePayment",
+    "PaymentsList",
 ]
 
+from fastapi_app.schemas.account import (
+    AccountCreate,
+    AccountOut,
+)
 from fastapi_app.schemas.auth import (
     LoginRequest,
     LoginResponse,
     TokenInfo,
     TokenPayload,
+)
+from fastapi_app.schemas.payment import (
+    CreatePayment,
+    PaymentsList,
 )
 from fastapi_app.schemas.permission import (
     PermissionCreate,
