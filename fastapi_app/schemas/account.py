@@ -1,12 +1,14 @@
 """Схемы для балансового счета."""
 
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
 
 
 class AccountConfig(BaseModel):
     """Модель балансового счёта."""
 
-    account_number: int
+    id: int
     balance: float = 0
 
 
@@ -18,6 +20,7 @@ class AccountOut(AccountConfig):
     """Модель демонстрации счёта."""
 
     model_config = ConfigDict(from_attributes=True)
+    created_at: datetime
     is_active: bool
 
 

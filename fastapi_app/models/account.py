@@ -1,8 +1,9 @@
 """Модель платёжного счёта пользователя."""
 
+from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Float, ForeignKey, Integer
+from sqlalchemy import TIMESTAMP, Float, ForeignKey, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from fastapi_app.models.base import Base
@@ -19,17 +20,17 @@ class Account(IntIdPkMixin, ActiveMixin, Base):
 
     __tablename__ = "accounts"
 
-    number: Mapped[int] = mapped_column(
-        Integer,
-        nullable=False,
-        unique=True,
-    )
     balance: Mapped[float] = mapped_column(
         Float,
         default=0,
     )
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        TIMESTAMP(timezone=True),
+        nullable=False,
+        server_default=func.now(),
     )
     user: Mapped["User"] = relationship(
         "User",
@@ -45,7 +46,6 @@ class Account(IntIdPkMixin, ActiveMixin, Base):
         """Строковое представление модели."""
         return (
             f"<Account(id={self.id!r}, "
-            f"number={self.number!r}, "
             f"balance={self.balance!r}, "
             f"user_id={self.user_id!r})>"
         )
