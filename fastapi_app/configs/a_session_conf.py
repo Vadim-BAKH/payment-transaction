@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import (
 from fastapi_app.configs.main_conf import settings
 
 async_engine = create_async_engine(
-    url=str(settings.db.url),
+    url=settings.db.url.unicode_string(),
     echo=settings.db.echo,
     future=True,
     pool_size=settings.db.pool_size,
