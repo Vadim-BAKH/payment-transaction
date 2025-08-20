@@ -22,12 +22,17 @@ __all__ = [
     "UserAllInfoConfig",
     "PaginateAllUsersInfo",
     "AccountOut",
+    "PaymentOut",
+    "ListAllUserInfoOut",
 ]
 
 from fastapi_app.schemas.account import (
     AccountCreate,
     AccountOut,
     AccountsList,
+)
+from fastapi_app.schemas.all_users_position import (
+    ListAllUserInfoOut,
 )
 from fastapi_app.schemas.auth import (
     LoginRequest,
@@ -37,6 +42,7 @@ from fastapi_app.schemas.auth import (
 )
 from fastapi_app.schemas.payment import (
     CreatePayment,
+    PaymentOut,
     PaymentsList,
 )
 from fastapi_app.schemas.permission import (
@@ -56,8 +62,4 @@ from fastapi_app.schemas.user import (
     UserCreate,
     UserOut,
     UserUpdate,
-)
-from fastapi_app.schemas.users_info import (
-    PaginateAllUsersInfo,
-    UserAllInfoConfig,
 )

@@ -1,9 +1,10 @@
 """Репозиторий для работы транзакциями платежей в базе данных."""
 
-from sqlalchemy import Sequence, select
+from sqlalchemy import Sequence, desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
-from fastapi_app.models import Payment
+from fastapi_app.models import Account, Payment
 
 
 class PaymentRepo:
@@ -13,10 +14,14 @@ class PaymentRepo:
         """Инициализация сессии базы данных."""
         self.session = session
 
-    async def get_all_payments(self, account_id: int) -> Sequence[Payment]:
+    async def get_all_payments(self, user_id: int) -> Sequence[Payment]:
         """Получить все транзакции пользователя."""
-        smtp = select(Payment).where(
-            Payment.account_id == account_id,
+        smtp = (
+            select(Payment)
+            .options(joinedload(Payment.account))
+            .join(Payment.account)
+            .where(Account.user_id == user_id)
+            .order_by(desc(Payment.created_at))
         )
         result = await self.session.execute(smtp)
         payments_orm = result.scalars().all()
