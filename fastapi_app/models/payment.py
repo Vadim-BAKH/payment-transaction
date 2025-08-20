@@ -11,12 +11,13 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from fastapi_app.models.base import Base
+from fastapi_app.models.mixins.created_at_mix import CreatedAtMixin
 
 if TYPE_CHECKING:
     from fastapi_app.models.account import Account
 
 
-class Payment(Base):
+class Payment(CreatedAtMixin, Base):
     """Модель транзакции платежа."""
 
     __tablename__ = "payments"

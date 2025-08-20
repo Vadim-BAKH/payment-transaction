@@ -1,12 +1,12 @@
 """Модель платёжного счёта пользователя."""
 
-from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import TIMESTAMP, Float, ForeignKey, func
+from sqlalchemy import Float, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from fastapi_app.models.base import Base
+from fastapi_app.models.mixins.created_at_mix import CreatedAtMixin
 from fastapi_app.models.mixins.pk_mix import IntIdPkMixin
 from fastapi_app.models.mixins.soft_delete import ActiveMixin
 
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from fastapi_app.models.user import User
 
 
-class Account(IntIdPkMixin, ActiveMixin, Base):
+class Account(IntIdPkMixin, CreatedAtMixin, ActiveMixin, Base):
     """Модель счета и баланса для пользователя."""
 
     __tablename__ = "accounts"
@@ -26,11 +26,6 @@ class Account(IntIdPkMixin, ActiveMixin, Base):
     )
     user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        TIMESTAMP(timezone=True),
-        nullable=False,
-        server_default=func.now(),
     )
     user: Mapped["User"] = relationship(
         "User",
