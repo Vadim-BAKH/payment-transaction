@@ -1,6 +1,8 @@
 """Репозиторий для работы со счётом в базе данных."""
 
-from sqlalchemy import Sequence, select
+from typing import Optional
+
+from sqlalchemy import Sequence, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi_app.models import Account
@@ -15,11 +17,11 @@ class AccountRepo:
 
     async def get_all_accounts(self, user_id: int) -> Sequence[Account]:
         """Получить все счета пользователя."""
-        smtp = select(Account).where(
+        stmt = select(Account).where(
             Account.user_id == user_id,
             Account.is_active,
         )
-        result = await self.session.execute(smtp)
+        result = await self.session.execute(stmt)
         accounts_orm = result.scalars().all()
         return accounts_orm
 
@@ -30,3 +32,23 @@ class AccountRepo:
         await self.session.commit()
         await self.session.refresh(account)
         return account
+
+    async def update_balance(
+        self,
+        account_id: int,
+        amount: float,
+    ) -> Optional[Account]:
+        """Обновить баланс счета, увеличив его на amount."""
+        stmt = (
+            update(Account)
+            .where(
+                Account.id == account_id,
+                Account.is_active,
+            )
+            .values(balance=Account.balance + amount)
+            .returning(Account)
+        )
+        result = await self.session.execute(stmt)
+        await self.session.commit()
+        updated_account = result.scalar_one_or_none()
+        return updated_account
