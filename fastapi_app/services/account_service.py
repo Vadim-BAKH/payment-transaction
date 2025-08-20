@@ -18,7 +18,7 @@ class AccountService:
     async def get_all_user_accounts(self, user_id: int) -> AccountsList:
         """Получение всех активных счетов пользователя."""
         accounts: Sequence[Account] = await self.account_repo.get_all_accounts(
-            user_id=user_id
+            user_id=user_id,
         )
         if not accounts:
             raise AccountNotFound()
