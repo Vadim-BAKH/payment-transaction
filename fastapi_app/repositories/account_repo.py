@@ -25,6 +25,15 @@ class AccountRepo:
         accounts_orm = result.scalars().all()
         return accounts_orm
 
+    async def get_account_by_id(self, account_id: int) -> Account | None:
+        """Получает платежный счёт по id."""
+        stmt = select(Account).where(
+            Account.id == account_id,
+            Account.is_active,
+        )
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()
+
     async def create_account(self, user_id: int) -> Account:
         """Создать новый счёт для пользователя."""
         account = Account(user_id=user_id)

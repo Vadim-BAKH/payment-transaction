@@ -39,5 +39,15 @@ class AccountNotFound(HTTPException):
     def __init__(self):
         super().__init__(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Accounts not found.",
+            detail="Account(s) not found.",
+        )
+
+
+class PaymentNotFound(HTTPException):
+    """Модель исключения 'PaymentNotFound'."""
+
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Payment(s) not found.",
         )

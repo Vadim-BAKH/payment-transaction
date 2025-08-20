@@ -15,6 +15,7 @@ __all__ = [
     "ResourceNotFound",
     "BadAccountNumber",
     "AccountNotFound",
+    "PaymentNotFound",
 ]
 
 from fastapi_app.exceptions.detail_exc.bad_request import (
@@ -29,6 +30,7 @@ from fastapi_app.exceptions.detail_exc.forbidden import (
 from fastapi_app.exceptions.detail_exc.not_found import (
     AccountNotFound,
     NoUserByThisId,
+    PaymentNotFound,
     ResourceNotFound,
     UserNotFound,
 )
