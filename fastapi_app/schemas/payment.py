@@ -1,5 +1,7 @@
 """Схемы для платёжных транзакций."""
 
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -22,6 +24,7 @@ class PaymentOut(PaymentConfig):
     """Модель демонстрации платежа."""
 
     model_config = ConfigDict(from_attributes=True)
+    created_at: datetime
 
 
 class PaymentsList(BaseModel):
