@@ -8,8 +8,7 @@ from pydantic import BaseModel, ConfigDict
 class AccountConfig(BaseModel):
     """Модель балансового счёта."""
 
-    id: int
-    balance: float = 0
+    user_id: int
 
 
 class AccountCreate(AccountConfig):
@@ -20,6 +19,7 @@ class AccountOut(AccountConfig):
     """Модель демонстрации счёта."""
 
     model_config = ConfigDict(from_attributes=True)
+    balance: float
     created_at: datetime
     is_active: bool
 

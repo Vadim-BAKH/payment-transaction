@@ -14,6 +14,7 @@ __all__ = [
     "NotRightEnough",
     "ResourceNotFound",
     "BadAccountNumber",
+    "AccountNotFound",
 ]
 
 from fastapi_app.exceptions.detail_exc.bad_request import (
@@ -26,6 +27,7 @@ from fastapi_app.exceptions.detail_exc.forbidden import (
     UserInActive,
 )
 from fastapi_app.exceptions.detail_exc.not_found import (
+    AccountNotFound,
     NoUserByThisId,
     ResourceNotFound,
     UserNotFound,

@@ -31,3 +31,13 @@ class ResourceNotFound(HTTPException):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Resource not found.",
         )
+
+
+class AccountNotFound(HTTPException):
+    """Модель исключения 'AccountNotFound'."""
+
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Accounts not found.",
+        )
