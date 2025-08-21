@@ -18,7 +18,7 @@ class UserRepo:
         """Получить активного пользователя по email."""
         stmt = select(User).where(
             User.email == email,
-            User.is_active,
+            User.is_active.is_(True),
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
@@ -27,7 +27,7 @@ class UserRepo:
         """Получить активного пользователя по ID."""
         stmt = select(User).where(
             User.id == user_id,
-            User.is_active,
+            User.is_active.is_(True),
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
@@ -36,7 +36,7 @@ class UserRepo:
         """Проверить существование активного пользователя по email."""
         stmt = select(User.id).where(
             User.email == email,
-            User.is_active,
+            User.is_active.is_(True),
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none() is not None
@@ -66,7 +66,10 @@ class UserRepo:
         """Soft delete: Деактивировать пользователя по ID."""
         stmt = (
             update(User)
-            .where(User.id == user_id, User.is_active)
+            .where(
+                User.id == user_id,
+                User.is_active.is_(True),
+            )
             .values(is_active=False)
         )
         await self.session.execute(stmt)
@@ -82,7 +85,10 @@ class UserRepo:
         password: bytes | None = None,
     ) -> User | None:
         """Обновить данные пользователя по ID. Возвращает обновлённого пользователя."""
-        stmt = select(User).where(User.id == user_id, User.is_active)
+        stmt = select(User).where(
+            User.id == user_id,
+            User.is_active.is_(True),
+        )
         result = await self.session.execute(stmt)
         user = result.scalar_one_or_none()
 

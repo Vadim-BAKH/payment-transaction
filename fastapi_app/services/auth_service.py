@@ -62,7 +62,7 @@ class AuthService:
             log.warning("Access-токен не содержит поля 'sub'")
             raise InvalidToken()
 
-        user = await self.user_repo.get_by_id(user_id)
+        user = await self.user_repo.get_by_id(user_id=int(user_id))
         if not user:
             log.warning("Пользователь с id %s не найден", user_id)
             raise InvalidToken()
@@ -85,7 +85,7 @@ class AuthService:
             log.warning("Refresh-токен не содержит поля 'sub'")
             raise InvalidToken()
 
-        user = await self.user_repo.get_by_id(user_id)
+        user = await self.user_repo.get_by_id(user_id=int(user_id))
         if not user:
             log.warning("Пользователь с id %s не найден", user_id)
             raise InvalidToken()
