@@ -16,12 +16,18 @@ __all__ = [
     "BadAccountNumber",
     "AccountNotFound",
     "PaymentNotFound",
+    "InvalidSignature",
+    "TransactionAlreadyProcessed",
 ]
 
 from fastapi_app.exceptions.detail_exc.bad_request import (
     BadAccountNumber,
     EmailExists,
+    InvalidSignature,
     PasswordsDoNotMatch,
+)
+from fastapi_app.exceptions.detail_exc.conflict import (
+    TransactionAlreadyProcessed,
 )
 from fastapi_app.exceptions.detail_exc.forbidden import (
     NotRightEnough,

@@ -32,3 +32,13 @@ class BadAccountNumber(HTTPException):
             detail="Account has 20 numbers and "
             "first number must be more then 0.",
         )
+
+
+class InvalidSignature(HTTPException):
+    """Исключение при несовпадении сигнатур."""
+
+    def __init__(self):
+        super().__init__(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid signature",
+        )
