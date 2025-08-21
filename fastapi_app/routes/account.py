@@ -3,11 +3,13 @@
 from fastapi import APIRouter, Depends, status
 
 from fastapi_app.dependencies import (
+    CurrActiveUser,
     get_account_service,
 )
 from fastapi_app.schemas import (
     AccountCreate,
     AccountOut,
+    AccountsList,
 )
 from fastapi_app.services import AccountService
 
@@ -24,8 +26,21 @@ async def create_account(
     # _: None = Depends(check_permission("super", "main")),
     service: AccountService = Depends(get_account_service),
 ):
-    """Получение списка заявок."""
+    """Создание счёта пользователя."""
     return await service.create_user_account(user_in=account)
+
+
+@router.get(
+    "/look",
+    response_model=AccountsList,
+    status_code=status.HTTP_200_OK,
+)
+async def get_user_accounts(
+    user: CurrActiveUser,
+    service: AccountService = Depends(get_account_service),
+) -> AccountsList:
+    """Получения списка активных счетов текущего пользователя."""
+    return await service.get_all_user_accounts(user_id=user.id)
 
 
 # @router.post(
