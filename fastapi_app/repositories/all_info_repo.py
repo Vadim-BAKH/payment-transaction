@@ -9,7 +9,7 @@ from sqlalchemy.orm import joinedload
 from fastapi_app.models import User
 
 
-class AllUserInfo:
+class AllUserInfoRepo:
     """Репозиторий для получения необходимой информации."""
 
     def __init__(self, session: AsyncSession):

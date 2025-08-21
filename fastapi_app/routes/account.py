@@ -1,17 +1,23 @@
 """Роутер для управления счетами пользователя."""
 
 from fastapi import APIRouter, Depends, status
+from fastapi_pagination import Params
 
 from fastapi_app.dependencies import (
     CurrActiveUser,
     get_account_service,
+    get_info_users_accounts_service,
 )
 from fastapi_app.schemas import (
     AccountCreate,
     AccountOut,
     AccountsList,
+    ListAllUserInfoOut,
 )
-from fastapi_app.services import AccountService
+from fastapi_app.services import (
+    AccountService,
+    AllUserInfoService,
+)
 
 router = APIRouter(prefix="/accounts", tags=["Account"])
 
@@ -43,28 +49,15 @@ async def get_user_accounts(
     return await service.get_all_user_accounts(user_id=user.id)
 
 
-# @router.post(
-#     "/",
-#     response_model=OrderOut,
-#     status_code=status.HTTP_201_CREATED,
-# )
-# async def create_order(
-#     order: OrderCreate,
-#     _: None = Depends(check_permission("orders", "create")),
-#     service: OrderService = Depends(get_order_service),
-# ):
-#     """Создание заявки."""
-#     return await service.create_order(order)
-#
-#
-# @router.delete(
-#     "/{order_id}",
-#     status_code=status.HTTP_204_NO_CONTENT,
-# )
-# async def delete_order(
-#     order_id: UUID,
-#     _: None = Depends(check_permission("orders", "delete")),
-#     service: OrderService = Depends(get_order_service),
-# ):
-#     """Удаление заявки по ID."""
-#     await service.delete_order(order_id)
+@router.get(
+    "/users",
+    response_model=ListAllUserInfoOut,
+    status_code=status.HTTP_200_OK,
+)
+async def get_all_users_accounts(
+    params: Params = Depends(),
+    # _: None = Depends(check_permission("super", "main")),
+    service: AllUserInfoService = Depends(get_info_users_accounts_service),
+) -> ListAllUserInfoOut:
+    """Получения списка активных счетов текущего пользователя."""
+    return await service.get_all_users_info(params=params)

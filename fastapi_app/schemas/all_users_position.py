@@ -15,8 +15,7 @@ class AllUserInfoOut(BaseModel):
     accounts: AccountsList
 
 
-class ListAllUserInfoOut(BaseModel):
+class ListAllUserInfoOut(Page[AllUserInfoOut]):
     """Модель пагинированного списка пользователей со счетами."""
 
     model_config = ConfigDict(from_attributes=True)
-    info: Page[AllUserInfoOut]
