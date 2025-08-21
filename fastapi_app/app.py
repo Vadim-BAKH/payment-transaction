@@ -9,7 +9,10 @@ from fastapi.responses import ORJSONResponse
 
 from fastapi_app.configs import async_engine, settings
 from fastapi_app.exceptions import register_exception_handler
-from fastapi_app.routes import jwt_rout
+from fastapi_app.routes import (
+    admin_dist_rout,
+    jwt_rout,
+)
 
 
 @asynccontextmanager
@@ -41,3 +44,4 @@ app_.add_middleware(
 )
 
 app_.include_router(jwt_rout, prefix=settings.app.api_prefix)
+app_.include_router(admin_dist_rout, prefix=settings.app.api_prefix)
