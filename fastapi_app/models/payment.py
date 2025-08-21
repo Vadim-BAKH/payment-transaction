@@ -25,6 +25,7 @@ class Payment(CreatedAtMixin, Base):
     transaction_id: Mapped[str] = mapped_column(
         String,
         nullable=False,
+        unique=True,
     )
     account_id: Mapped[int] = mapped_column(
         ForeignKey("accounts.id"),
