@@ -19,7 +19,7 @@ class AccountRepo:
         """Получить все счета пользователя."""
         stmt = select(Account).where(
             Account.user_id == user_id,
-            Account.is_active,
+            Account.is_active.is_(True),
         )
         result = await self.session.execute(stmt)
         accounts_orm = result.scalars().all()
@@ -29,7 +29,7 @@ class AccountRepo:
         """Получает платежный счёт по id."""
         stmt = select(Account).where(
             Account.id == account_id,
-            Account.is_active,
+            Account.is_active.is_(True),
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
@@ -52,7 +52,7 @@ class AccountRepo:
             update(Account)
             .where(
                 Account.id == account_id,
-                Account.is_active,
+                Account.is_active.is_(True),
             )
             .values(balance=Account.balance + amount)
             .returning(Account)
