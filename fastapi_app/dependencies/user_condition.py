@@ -1,6 +1,6 @@
 """Модуль зависимости от состояния авторизованного пользователя."""
 
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -10,10 +10,8 @@ from fastapi_app.dependencies.db_session import DBSessionDep
 from fastapi_app.dependencies.get_user_repo import get_user_repo
 from fastapi_app.exceptions import UserUnauthorized
 from fastapi_app.models import User
-
-if TYPE_CHECKING:
-    from fastapi_app.repositories import UserRepo
-    from fastapi_app.services import AuthService
+from fastapi_app.repositories import UserRepo
+from fastapi_app.services import AuthService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/jwt/login/")
 

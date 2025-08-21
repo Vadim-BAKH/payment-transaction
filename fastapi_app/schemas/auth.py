@@ -17,7 +17,7 @@ class TokenInfo(BaseModel):
 class TokenPayload(BaseModel):
     """Представление токена."""
 
-    sub: id
+    sub: int
     exp: int
     type: str  # "access" or "refresh"
 
