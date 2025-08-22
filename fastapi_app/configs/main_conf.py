@@ -10,11 +10,22 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 CERTS_DIR = Path("/app/certs")
 
 
-LOG_DEFAULT_FORMAT = "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"
+LOG_DEFAULT_FORMAT = (
+    "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"
+)
 
 
 class SuperUserConfig(BaseModel):
     """Конфигуратор администратора."""
+
+    email: str
+    password: str
+    first_name: str
+    last_name: str
+
+
+class TestUserConfig(BaseModel):
+    """Конфигуратор тестового пользователя."""
 
     email: str
     password: str
@@ -81,6 +92,7 @@ class Settings(BaseSettings):
     db: DatabaseConfig
     auth_jwt: AuthJWT = AuthJWT()
     superuser: SuperUserConfig
+    test_user: TestUserConfig
     secret: SecretConfig
 
     model_config = SettingsConfigDict(

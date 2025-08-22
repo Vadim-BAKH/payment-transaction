@@ -10,6 +10,7 @@ __all__ = [
     "get_account_service",
     "get_info_users_accounts_service",
     "get_payment_service",
+    "get_user_service",
 ]
 from fastapi_app.dependencies.check_permission import (
     check_permission,
@@ -26,8 +27,9 @@ from fastapi_app.dependencies.get_all_info import (
 from fastapi_app.dependencies.get_payment import (
     get_payment_service,
 )
-from fastapi_app.dependencies.get_user_repo import (
+from fastapi_app.dependencies.get_user import (
     get_user_repo,
+    get_user_service,
 )
 from fastapi_app.dependencies.user_condition import (
     CurrActiveUser,

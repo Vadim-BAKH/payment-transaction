@@ -25,7 +25,7 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
     "/roles",
     response_model=RoleOut,
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_201_CREATED,
 )
@@ -38,7 +38,7 @@ async def create_role(data: RoleCreate, session: DBSessionDep):
     "/roles",
     response_model=list[RoleOut],
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_200_OK,
 )
@@ -50,7 +50,7 @@ async def get_roles(session: DBSessionDep):
 @router.delete(
     "/roles/{role_id}",
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_204_NO_CONTENT,
 )
@@ -64,7 +64,7 @@ async def delete_role(role_id: int, session: DBSessionDep):
     "/resources",
     response_model=ResourceOut,
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_201_CREATED,
 )
@@ -80,7 +80,7 @@ async def create_resource(
     "/resources",
     response_model=list[ResourceOut],
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_200_OK,
 )
@@ -92,7 +92,7 @@ async def get_resources(session: DBSessionDep):
 @router.delete(
     "/resources/{resource_id}",
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_204_NO_CONTENT,
 )
@@ -109,7 +109,7 @@ async def delete_resource(
     "/permissions",
     response_model=PermissionOut,
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_201_CREATED,
 )
@@ -125,7 +125,7 @@ async def create_permission(
     "/permissions",
     response_model=list[PermissionOut],
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_200_OK,
 )
@@ -137,7 +137,7 @@ async def get_permissions(session: DBSessionDep):
 @router.delete(
     "/permissions/{permission_id}",
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_204_NO_CONTENT,
 )
@@ -149,7 +149,7 @@ async def delete_permission(permission_id: int, session: DBSessionDep):
 @router.post(
     "/assign",
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_201_CREATED,
 )
@@ -168,7 +168,7 @@ async def assign_permission_to_role(
 @router.post(
     "/assign-role",
     dependencies=[
-        Depends(check_permission("superuser", "main")),
+        Depends(check_permission("super", "main")),
     ],
     status_code=status.HTTP_201_CREATED,
 )

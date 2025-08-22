@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from fastapi_app.authentication import validate_password
 from fastapi_app.dependencies.db_session import DBSessionDep
-from fastapi_app.dependencies.get_user_repo import get_user_repo
+from fastapi_app.dependencies.get_user import get_user_repo
 from fastapi_app.exceptions import UserUnauthorized
 from fastapi_app.models import User
 from fastapi_app.repositories import UserRepo

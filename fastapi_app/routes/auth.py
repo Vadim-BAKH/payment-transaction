@@ -1,11 +1,11 @@
 """Роутер для регистрации пользователей и аутентификации."""
 
-from fastapi import APIRouter, Body, status
+from fastapi import APIRouter, Body, Depends, status
 
 from fastapi_app.dependencies import (
     CurrActiveUser,
-    DBSessionDep,
-    get_user_repo,
+    check_permission,
+    get_user_service,
 )
 from fastapi_app.schemas import (
     UserCreate,
@@ -24,12 +24,15 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 )
 async def register_user(
     user_in: UserCreate,
-    session: DBSessionDep,
+    _: None = Depends(check_permission("super", "main")),
+    service: UserService = Depends(get_user_service),
 ):
-    """Регистрация нового пользователя."""
-    user_repo = get_user_repo(session=session)
-    user_service = UserService(user_repo=user_repo)
-    user = await user_service.register_user(user_in=user_in)
+    """
+    Регистрация нового пользователя.
+
+    Доступно только администратору.
+    """
+    user = await service.register_user(user_in=user_in)
     return user
 
 
@@ -50,42 +53,41 @@ async def get_auth_user_self_info(
 
 
 @router.patch(
-    "/users/me",
+    "/users/{user_id}",
     response_model=UserOut,
     status_code=status.HTTP_200_OK,
 )
-async def update_current_user(
-    user: CurrActiveUser,
-    session: DBSessionDep,
+async def update_user_by_id(
+    user_id: int,
     user_update: UserUpdate = Body(...),
+    _: None = Depends(check_permission("super", "main")),
+    user_service: UserService = Depends(get_user_service),
 ):
     """
-    Обновление информации о текущем пользователе.
+    Обновление информации о пользователе.
 
     Поля, которые не переданы — не изменятся.
+    Доступно только администратору.
     """
-    user_repo = get_user_repo(session=session)
-    user_service = UserService(user_repo=user_repo)
     updated_user = await user_service.update_user_by_id(
-        user_id=user.id,
+        user_id=user_id,
         user_update=user_update,
     )
     return UserOut.model_validate(updated_user)
 
 
 @router.delete(
-    "/users/me",
+    "/users/{user_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def delete_current_user(
-    user: CurrActiveUser,
-    session: DBSessionDep,
+async def delete_user_by_id(
+    user_id: int,
+    _: None = Depends(check_permission("super", "main")),
+    user_service: UserService = Depends(get_user_service),
 ):
     """
-    Удаление (деактивация) пользователя.
+    Удаление (деактивация) пользователя по ID.
 
-    Требуется access-токен.
+    Доступно только администратору.
     """
-    user_repo = get_user_repo(session=session)
-    user_service = UserService(user_repo=user_repo)
-    await user_service.delete_user_by_id(user_id=user.id)
+    await user_service.delete_user_by_id(user_id=user_id)

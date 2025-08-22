@@ -5,6 +5,7 @@ from fastapi_pagination import Params
 
 from fastapi_app.dependencies import (
     CurrActiveUser,
+    check_permission,
     get_account_service,
     get_info_users_accounts_service,
 )
@@ -29,7 +30,7 @@ router = APIRouter(prefix="/accounts", tags=["Account"])
 )
 async def create_account(
     account: AccountCreate,
-    # _: None = Depends(check_permission("super", "main")),
+    _: None = Depends(check_permission("super", "main")),
     service: AccountService = Depends(get_account_service),
 ):
     """Создание счёта пользователя."""
@@ -56,7 +57,7 @@ async def get_user_accounts(
 )
 async def get_all_users_accounts(
     params: Params = Depends(),
-    # _: None = Depends(check_permission("super", "main")),
+    _: None = Depends(check_permission("super", "main")),
     service: AllUserInfoService = Depends(get_info_users_accounts_service),
 ) -> ListAllUserInfoOut:
     """Получения списка активных счетов текущего пользователя."""
