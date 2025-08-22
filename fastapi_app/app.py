@@ -14,6 +14,7 @@ from fastapi_app.routes import (
     admin_dist_rout,
     auth_rout,
     jwt_rout,
+    pay_rout,
 )
 
 
@@ -49,3 +50,4 @@ app_.include_router(jwt_rout, prefix=settings.app.api_prefix)
 app_.include_router(admin_dist_rout, prefix=settings.app.api_prefix)
 app_.include_router(auth_rout, prefix=settings.app.api_prefix)
 app_.include_router(account_rout, prefix=settings.app.api_prefix)
+app_.include_router(pay_rout, prefix=settings.app.api_prefix)

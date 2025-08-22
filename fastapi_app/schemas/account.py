@@ -19,6 +19,7 @@ class AccountOut(AccountConfig):
     """Модель демонстрации счёта."""
 
     model_config = ConfigDict(from_attributes=True)
+    id: int
     balance: float
     created_at: datetime
     is_active: bool

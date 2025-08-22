@@ -35,13 +35,22 @@ class PaymentRepo:
         amount: float,
     ) -> Payment:
         """Создать новую транзакцию."""
-        payment = Payment(
+        new_payment = Payment(
             transaction_id=transaction_id,
             account_id=account_id,
             signature=signature,
             amount=amount,
         )
-        self.session.add(payment)
+        self.session.add(new_payment)
         await self.session.commit()
-        await self.session.refresh(payment)
-        return payment
+        await self.session.refresh(new_payment)
+        return new_payment
+
+    async def get_by_transaction_id(
+        self,
+        transaction_id: str,
+    ) -> Payment | None:
+        """Получить транзакцию по transaction_id."""
+        stmt = select(Payment).where(Payment.transaction_id == transaction_id)
+        result = await self.session.execute(stmt)
+        return result.scalar_one_or_none()

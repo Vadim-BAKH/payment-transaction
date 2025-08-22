@@ -2,10 +2,17 @@
 
 from typing import Sequence
 
-from fastapi_app.exceptions import PaymentNotFound
+from fastapi_app.exceptions import (
+    PaymentNotFound,
+    TransactionAlreadyProcessed,
+)
 from fastapi_app.models import Payment
 from fastapi_app.repositories import AccountRepo, PaymentRepo
-from fastapi_app.schemas import CreatePayment, PaymentOut, PaymentsList
+from fastapi_app.schemas import (
+    CreatePayment,
+    PaymentOut,
+    PaymentsList,
+)
 
 
 class PaymentService:
@@ -19,6 +26,15 @@ class PaymentService:
         """Инициализация с репозиториями счетов и платежей."""
         self.account_repo = account_repo
         self.payment_repo = payment_repo
+
+    async def check_unique_transaction_id(self, data: CreatePayment) -> bool:
+        """Проверяет уникальность transaction_id."""
+        existing = await self.payment_repo.get_by_transaction_id(
+            transaction_id=data.transaction_id,
+        )
+        if existing:
+            raise TransactionAlreadyProcessed()
+        return False
 
     async def create_payment_and_update_balance(
         self,
@@ -34,6 +50,7 @@ class PaymentService:
         :param payment_in: Данные нового платежа.
         :return: Объект созданного платежа.
         """
+        await self.check_unique_transaction_id(data=payment_in)
         account = await self.account_repo.get_account_by_id(
             account_id=payment_in.account_id,
         )
@@ -41,20 +58,14 @@ class PaymentService:
             account = await self.account_repo.create_account(
                 user_id=payment_in.user_id,
             )
-            await self.account_repo.update_balance(
-                account_id=account.id,
-                amount=payment_in.amount,
-            )
-        else:
-            await self.account_repo.update_balance(
-                account_id=account.id,
-                amount=payment_in.amount,
-            )
-
         payment = await self.payment_repo.create_payment(
             transaction_id=payment_in.transaction_id,
             account_id=account.id,
             signature=payment_in.signature,
+            amount=payment_in.amount,
+        )
+        await self.account_repo.update_balance(
+            account_id=account.id,
             amount=payment_in.amount,
         )
 
