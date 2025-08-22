@@ -3,7 +3,7 @@
 import hashlib
 import uuid
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -61,8 +61,15 @@ class PaymentOut(PaymentConfig):
     created_at: datetime
 
 
+class PaymentRead(PaymentOut):
+    """Модель демонстрации платежа для пользователя."""
+
+    signature: Annotated[Optional[str], Field(default=None, exclude=True)]
+    model_config = ConfigDict(from_attributes=True)
+
+
 class PaymentsList(BaseModel):
     """Модель списка платежных транзакций."""
 
     model_config = ConfigDict(from_attributes=True)
-    payments: list[PaymentOut]
+    payments: list[PaymentRead]

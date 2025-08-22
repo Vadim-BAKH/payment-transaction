@@ -11,6 +11,7 @@ from fastapi_app.repositories import AccountRepo, PaymentRepo
 from fastapi_app.schemas import (
     CreatePayment,
     PaymentOut,
+    PaymentRead,
     PaymentsList,
 )
 
@@ -77,7 +78,7 @@ class PaymentService:
 
         :param user_id: Идентификатор пользователя.
         :return: Список платежей в виде Pydantic-схемы PaymentsList.
-        :raises PaymentNotFound: если платежи не найдены.
+        :raises PaymentNotFound: Если платежи не найдены.
         """
         payments: Sequence[Payment] = await self.payment_repo.get_all_payments(
             user_id=user_id,
@@ -85,7 +86,7 @@ class PaymentService:
         if not payments:
             raise PaymentNotFound()
         payments_out = [
-            PaymentOut.model_validate(
+            PaymentRead.model_validate(
                 payment,
             )
             for payment in payments
