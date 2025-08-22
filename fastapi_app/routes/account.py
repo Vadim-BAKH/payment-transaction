@@ -33,7 +33,11 @@ async def create_account(
     _: None = Depends(check_permission("super", "main")),
     service: AccountService = Depends(get_account_service),
 ):
-    """Создание счёта пользователя."""
+    """
+    Создание счёта пользователя.
+
+    Доступно только администратору.
+    """
     return await service.create_user_account(user_in=account)
 
 
@@ -60,5 +64,9 @@ async def get_all_users_accounts(
     _: None = Depends(check_permission("super", "main")),
     service: AllUserInfoService = Depends(get_info_users_accounts_service),
 ) -> ListAllUserInfoOut:
-    """Получения списка активных счетов текущего пользователя."""
+    """
+    Получения списка активных счетов c данными пользователей.
+
+    Доступно только администратору.
+    """
     return await service.get_all_users_info(params=params)
