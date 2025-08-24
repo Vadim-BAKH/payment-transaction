@@ -1,0 +1,73 @@
+name: Python FastApi CI/CD
+
+on:
+  push:
+    branches:
+      - development
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.12'
+
+      - name: Upgrade pip
+        run: |
+          pip install --upgrade pip
+
+      - name: Install Poetry
+        run: |
+          pip install poetry
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Run ruff
+        run: |
+          ruff check .
+
+      - name: Create .env file
+        run: |
+          echo "POSTGRES_USER=superuser" > .env
+          echo "POSTGRES_PASSWORD=mypassword" >> .env
+          echo "POSTGRES_DB=main_db" >> .env
+          echo "DB_PORT=5432" >> .env
+          echo "APP_CONFIG__DB__URL=postgresql+asyncpg://superuser:mypassword@db:5432/main_db" >> .env
+          echo "APP_CONFIG__DB__ECHO=True" >> .env
+          echo "APP_CONFIG__SUPERUSER__EMAIL=admin@example.com" >> .env
+          echo "APP_CONFIG__SUPERUSER__PASSWORD=supersecret123" >> .env
+          echo "APP_CONFIG__SUPERUSER__FIRST_NAME=Admin" >> .env
+          echo "APP_CONFIG__SUPERUSER__LAST_NAME=Root" >> .env
+          echo "APP_CONFIG__TEST_USER__EMAIL=test@example.com" >> .env
+          echo "APP_CONFIG__TEST_USER__PASSWORD=test1234" >> .env
+          echo "APP_CONFIG__TEST_USER__FIRST_NAME=Test" >> .env
+          echo "APP_CONFIG__TEST_USER__LAST_NAME=Test" >> .env
+          echo "APP_CONFIG__LOGGING__LEVEL=DEBUG" >> .env
+          echo "ADMINER_DEFAULT_SERVER=postgres" >> .env
+          echo "PGADMIN_DEFAULT_EMAIL=admin@example.com" >> .env
+          echo "PGADMIN_DEFAULT_PASSWORD=supersecret" >> .env
+          echo "APP_CONFIG__ORIGINS=[\"http://localhost\", \"http://localhost:8000\"]" >> .env
+          echo "APP_CONFIG__SECRET__KEY=gfdmhghif38yrf9ew0jkf32" >> .env
+
+      - name: Docker build and run
+        run: |
+          docker compose up --build -d
+
+      - name: Run Pytest
+        run: |
+          docker exec app pytest
+
+      - name: Finish workflow
+        run: |
+          docker compose down -v
