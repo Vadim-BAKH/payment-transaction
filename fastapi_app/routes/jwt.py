@@ -15,8 +15,7 @@ http_bearer = HTTPBearer(auto_error=False)
 
 router = APIRouter(
     prefix="/jwt",
-    tags=["YWT"],
-    dependencies=[Depends(http_bearer)],
+    tags=["JWT"],
 )
 
 
@@ -50,6 +49,7 @@ async def auth_user_issue_jwt(
     "/refresh",
     response_model=TokenInfo,
     response_model_exclude_none=True,
+    dependencies=[Depends(http_bearer)],
 )
 async def auth_refresh_jwt(
     user: CurrRefreshUser,

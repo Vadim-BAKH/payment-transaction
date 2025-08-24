@@ -41,6 +41,7 @@ services:
       - ./alembic.ini:/app/alembic.ini
       - ./migrations:/app/migrations
       - ./certs:/app/certs
+      - ./tests:/app/tests
 
   adminer:
     image: adminer

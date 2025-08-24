@@ -63,7 +63,7 @@ class AuthJWT(BaseModel):
 class DBTestConfig(BaseModel):
     """Модель тестового url."""
 
-    uri: str = "postgresql+asyncpg://test:test@test_db:5433/test_db"
+    uri: str = "postgresql+asyncpg://test:test@db_test:5432/test_db"
 
 
 class DatabaseConfig(BaseModel):
