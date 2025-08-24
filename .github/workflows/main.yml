@@ -31,11 +31,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry install
+          poetry install --no-root --with dev
 
       - name: Run ruff
         run: |
-          ruff check .
+          poetry run ruff check .
 
       - name: Create .env file
         run: |
@@ -59,6 +59,12 @@ jobs:
           echo "PGADMIN_DEFAULT_PASSWORD=supersecret" >> .env
           echo "APP_CONFIG__ORIGINS=[\"http://localhost\", \"http://localhost:8000\"]" >> .env
           echo "APP_CONFIG__SECRET__KEY=gfdmhghif38yrf9ew0jkf32" >> .env
+
+      - name: Generate JWT certs
+        run: |
+          mkdir -p certs
+          openssl genrsa -out certs/jwt-private.pem 2048
+          openssl rsa -in certs/jwt-private.pem -pubout -out certs/jwt-public.pem
 
       - name: Docker build and run
         run: |

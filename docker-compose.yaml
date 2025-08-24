@@ -41,6 +41,7 @@ services:
       - ./alembic.ini:/app/alembic.ini
       - ./migrations:/app/migrations
       - ./certs:/app/certs
+      - ./tests:/app/tests
 
   adminer:
     image: adminer
@@ -67,6 +68,17 @@ services:
       - db
     volumes:
       - pgadmin_data:/var/lib/pgadmin
+
+  db_test:
+    image: postgres:17.5
+    container_name: test
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
+    ports:
+      - "5433:5432"
+    restart: always
 
 volumes:
   postgres_data:

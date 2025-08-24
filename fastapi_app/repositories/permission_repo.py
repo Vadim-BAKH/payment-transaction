@@ -85,6 +85,7 @@ class PermissionRepo:
         """Получить право по действию и ресурсу."""
         stmt = (
             select(Permission)
+            .join(Permission.resource)
             .options(joinedload(Permission.resource))
             .where(Permission.action == action, Resource.name == resource_name)
         )
