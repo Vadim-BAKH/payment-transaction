@@ -35,7 +35,7 @@ jobs:
 
       - name: Run ruff
         run: |
-          ruff check .
+          poetry run ruff check .
 
       - name: Create .env file
         run: |
