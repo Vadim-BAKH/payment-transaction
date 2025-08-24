@@ -60,6 +60,12 @@ class AuthJWT(BaseModel):
     refresh_token_expire_days: int = 30
 
 
+class DBTestConfig(BaseModel):
+    """Модель тестового url."""
+
+    uri: str = "postgresql+asyncpg://test:test@test_db:5433/test_db"
+
+
 class DatabaseConfig(BaseModel):
     """Модель pydantic базы данных."""
 
@@ -88,6 +94,7 @@ class Settings(BaseSettings):
     app: AppConfig = AppConfig()
     origins: Annotated[list[str], Field(default_factory=list)]
     db: DatabaseConfig
+    url_test: DBTestConfig = DBTestConfig()
     auth_jwt: AuthJWT = AuthJWT()
     superuser: SuperUserConfig
     test_user: TestUserConfig
